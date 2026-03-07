@@ -8,6 +8,8 @@ import os
 import tempfile
 from pathlib import Path
 
+import pytest
+
 # Agregar src/ al path
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
@@ -22,11 +24,15 @@ os.environ["MODEL_PATH"] = _test_model_path
 from fastapi.testclient import TestClient  # noqa: E402
 from main import app  # noqa: E402
 
-client = TestClient(app)
+
+@pytest.fixture(scope="module")
+def client():
+    # El context manager garantiza que el evento startup se dispare
+    with TestClient(app) as c:
+        yield c
 
 
-def test_root():
-    """GET / devuelve info del servicio."""
+def test_root(client):
     response = client.get("/")
     assert response.status_code == 200
     data = response.json()
@@ -34,15 +40,13 @@ def test_root():
     assert "endpoints" in data
 
 
-def test_health():
-    """GET /health confirma que el modelo está cargado."""
+def test_health(client):
     response = client.get("/health")
     assert response.status_code == 200
     assert response.json()["status"] == "healthy"
 
 
-def test_info():
-    """GET /info devuelve metadata del modelo."""
+def test_info(client):
     response = client.get("/info")
     assert response.status_code == 200
     data = response.json()
@@ -51,17 +55,13 @@ def test_info():
     assert "feature_names" in data
 
 
-def test_predict_setosa():
-    """POST /predict con features típicas de Setosa."""
-    response = client.post(
-        "/predict",
-        json={
-            "sepal_length": 5.1,
-            "sepal_width": 3.5,
-            "petal_length": 1.4,
-            "petal_width": 0.2,
-        },
-    )
+def test_predict_setosa(client):
+    response = client.post("/predict", json={
+        "sepal_length": 5.1,
+        "sepal_width": 3.5,
+        "petal_length": 1.4,
+        "petal_width": 0.2,
+    })
     assert response.status_code == 200
     data = response.json()
     assert data["prediction_label"] == "setosa"
@@ -69,38 +69,23 @@ def test_predict_setosa():
     assert "prediction_id" in data
 
 
-def test_predict_returns_all_fields():
-    """POST /predict devuelve todos los campos del schema."""
-    response = client.post(
-        "/predict",
-        json={
-            "sepal_length": 6.7,
-            "sepal_width": 3.0,
-            "petal_length": 5.2,
-            "petal_width": 2.3,
-        },
-    )
+def test_predict_returns_all_fields(client):
+    response = client.post("/predict", json={
+        "sepal_length": 6.7,
+        "sepal_width": 3.0,
+        "petal_length": 5.2,
+        "petal_width": 2.3,
+    })
     assert response.status_code == 200
     data = response.json()
     required_fields = [
-        "prediction",
-        "prediction_label",
-        "confidence",
-        "probabilities",
-        "model_version",
-        "prediction_id",
-        "timestamp",
+        "prediction", "prediction_label", "confidence",
+        "probabilities", "model_version", "prediction_id", "timestamp",
     ]
     for field in required_fields:
         assert field in data, f"Falta campo: {field}"
 
 
-def test_predict_invalid_input():
-    """POST /predict con datos inválidos devuelve 422."""
-    response = client.post(
-        "/predict",
-        json={
-            "sepal_length": "no_es_numero",
-        },
-    )
+def test_predict_invalid_input(client):
+    response = client.post("/predict", json={"sepal_length": "no_es_numero"})
     assert response.status_code == 422
