@@ -34,12 +34,14 @@ def train_model(model_path="model.joblib"):
     # 80% entrenamiento, 20% evaluación
     # random_state fijo → reproducibilidad
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=39758307
+        X, y, test_size=0.2, random_state=826374
     )
 
     # --- 3. ENTRENAR EL MODELO ---
     # RandomForest: ensemble de 100 árboles de decisión
-    model = RandomForestClassifier(n_estimators=100, max_depth=5, random_state=39758307)
+    model = RandomForestClassifier(n_estimators=100,
+                                   max_depth=5,
+                                   random_state=826374)
     model.fit(X_train, y_train)
 
     # --- 4. EVALUAR ---
