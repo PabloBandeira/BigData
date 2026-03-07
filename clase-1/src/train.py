@@ -39,7 +39,7 @@ def main():
     # RandomForest: ensemble de 100 árboles de decisión
     # Cada árbol vota, gana la clase más votada (reduce overfitting vs un solo árbol)
     # random_state fijo → mismo modelo en cada ejecución
-    model = RandomForestClassifier(n_estimators=100, random_state=39758307)
+    model = RandomForestClassifier(n_estimators=100, random_state=35758194)
     model.fit(X_train, y_train)  # Aprende los patrones del conjunto de entrenamiento
 
     # --- 4. EVALUAR ---
