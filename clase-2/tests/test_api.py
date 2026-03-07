@@ -56,12 +56,15 @@ def test_info(client):
 
 
 def test_predict_setosa(client):
-    response = client.post("/predict", json={
-        "sepal_length": 5.1,
-        "sepal_width": 3.5,
-        "petal_length": 1.4,
-        "petal_width": 0.2,
-    })
+    response = client.post(
+        "/predict",
+        json={
+            "sepal_length": 5.1,
+            "sepal_width": 3.5,
+            "petal_length": 1.4,
+            "petal_width": 0.2,
+        },
+    )
     assert response.status_code == 200
     data = response.json()
     assert data["prediction_label"] == "setosa"
@@ -70,17 +73,25 @@ def test_predict_setosa(client):
 
 
 def test_predict_returns_all_fields(client):
-    response = client.post("/predict", json={
-        "sepal_length": 6.7,
-        "sepal_width": 3.0,
-        "petal_length": 5.2,
-        "petal_width": 2.3,
-    })
+    response = client.post(
+        "/predict",
+        json={
+            "sepal_length": 6.7,
+            "sepal_width": 3.0,
+            "petal_length": 5.2,
+            "petal_width": 2.3,
+        },
+    )
     assert response.status_code == 200
     data = response.json()
     required_fields = [
-        "prediction", "prediction_label", "confidence",
-        "probabilities", "model_version", "prediction_id", "timestamp",
+        "prediction",
+        "prediction_label",
+        "confidence",
+        "probabilities",
+        "model_version",
+        "prediction_id",
+        "timestamp",
     ]
     for field in required_fields:
         assert field in data, f"Falta campo: {field}"
