@@ -32,7 +32,7 @@ def main():
     # test_size=0.2 → 80% para entrenar, 20% para evaluar
     # random_state fijo → garantiza que la división sea siempre la misma (reproducibilidad)
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=39758307
+        X, y, test_size=0.2, random_state=35758194
     )
 
     # --- 3. ENTRENAR EL MODELO ---
