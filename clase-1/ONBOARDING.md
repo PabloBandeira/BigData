@@ -212,12 +212,93 @@ which python
 pip install --upgrade pip
 pip install -r requirements.txt -r requirements-dev.txt
 
+# Configurar pre-commit
+pre-commit install
 
-# Analizamos el codigo de src/train.py
+# Verificar instalación
+python -m pytest -q
+python src/train.py
+```
 
 ---
 
-## Chequeos de Validación
+## 6. Workflow: Subir tus Cambios (Alumnos)
+
+### Práctica guiada — Comandos esenciales
+
+```bash
+# Ver el estado actual (qué archivos cambiaron)
+git status
+
+# Agregar TODOS los archivos modificados al staging
+git add .
+
+# Agregar un archivo específico
+git add src/train.py
+
+# Crear un commit (foto del código) con mensaje descriptivo
+git commit -m "Entrené modelo RandomForest con Iris"
+
+# Ver el historial de commits
+git log --oneline
+
+# Subir los commits a GitHub
+git push
+```
+
+**Buenas prácticas para commits:**
+- Escribir mensajes **claros y descriptivos** (no "asdf" o "cambios")
+- Hacer commits **pequeños y frecuentes** (un commit por tarea)
+- Ejemplos buenos: `"Agregué test de reproducibilidad"`, `"Corregí accuracy baja"`
+
+### Crear tu rama personal
+
+```bash
+# Crear y cambiar a tu rama (usá tu nombre y apellido sin espacios)
+git checkout -b feature/nombreapellido
+```
+
+**Ejemplo:**
+```bash
+git checkout -b feature/juanperez
+```
+
+### Subir tus cambios
+
+```bash
+# Ver qué cambios hiciste
+git status
+
+# Agregar tus cambios
+git add .
+
+# Crear commits con descripciones claras
+git commit -m "Experimento: [descripción de qué hiciste]"
+
+# ⚠️ PRIMER push (solo la primera vez, vincula tu rama local con GitHub)
+git push --set-upstream origin "feature/nombreapellido"
+
+# A partir de ahí, todos los pushes siguientes son simplemente:
+git push
+```
+
+### El profesor revisa tu código
+
+El profesor accede a GitHub y revisa:
+- Tu rama en: `https://github.com/PabloBandeira/BigData`
+- Todos tus commits
+- Los cambios que hiciste
+- Tus resultados y experimentos
+
+### ⚠️ Importante
+
+- **NO pushees directamente a `main`** — siempre usá tu rama personal (`feature/nombreapellido`)
+- Cada cambio importante = nuevo commit con descripción clara
+- Los commits permiten que el profesor vea el progreso paso a paso
+
+---
+
+## 7. Chequeos de Validación
 
 Ejecutar cada comando y verificar la salida esperada:
 
