@@ -17,7 +17,7 @@ from sklearn.ensemble import (
 )  # Modelo: bosque de árboles de decisión
 from sklearn.metrics import accuracy_score, f1_score  # Métricas para evaluar el modelo
 
-DNI = 27826374
+DNI = 26374
 
 
 def main():
