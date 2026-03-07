@@ -39,6 +39,4 @@ jobs:
       run: |
         python src/train.py
     
-    - name: Build Docker image
-      run: |
-        docker build -t demo-ml:ci .
+    
