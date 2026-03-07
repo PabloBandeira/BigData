@@ -207,7 +207,7 @@ pip install -r requirements.txt -r requirements-dev.txt
 # Configurar pre-commit
 pre-commit install
 
-# Verificar instalación
+# Verificar instalaciónn
 python -m pytest -q
 python src/train.py
 ```
